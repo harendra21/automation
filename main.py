@@ -3,24 +3,40 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import time
 import random
-import os
 from selenium.webdriver.edge.service import Service
 
-urls = [
-    "https://hackeradda.com/post/15-free-hosting-providers-for-web-developers/",
-    "https://hackeradda.com/post/five-things-to-keep-in-mind-while-selecting-web-hosting-service/",
-    "https://hackeradda.com/post/free-cicd-and-integration-with-web-hosting-githubpage-travisci/",
-    "https://hackeradda.com/post/free-static-website-hosting-with-a-custom-domain-name/",
-    "https://hackeradda.com/post/free-web-hosting-and-domain-name/",
-    "https://hackeradda.com/post/how-to-choose-the-best-web-hosting-provider-the-ultimate-guide/",
-    "https://hackeradda.com/post/in-2022-the-best-web-hosting-and-domain-name-registration-services-to-use/",
-    "https://hackeradda.com/post/is-it-worth-using-free-web-hosting/",
-    "https://hackeradda.com/post/6-points-to-consider-when-choosing-a-web-host-for-your-business/",
-    "https://hackeradda.com/post/how-to-setup-cron-jobs-in-cpanel/",
-    "https://hackeradda.com/post/how-to-use-bluehost-to-create-your-own-wordpress-website/",
-    "https://hackeradda.com/post/what-does-it-mean-to-host-a-website-anonymously/",
-    "https://hackeradda.com/post/i-want-to-learn-programming-but-dont-know-where-to-begin/"
-    ]
+from xml.dom.minidom import parse
+import xml.dom.minidom
+import requests
+import os
+
+posts = []
+def getUrls(domain):
+    try :
+        siteMapName = 'sitemap.xml'
+        url = domain+'/sitemap.xml'
+        r = requests.get(url, allow_redirects=True)
+        open(siteMapName, 'wb').write(r.content)
+
+        xml_file = siteMapName
+
+        DOMTree = xml.dom.minidom.parse(xml_file)
+
+        root_node = DOMTree.documentElement
+
+        loc_nodes = root_node.getElementsByTagName("loc")
+        for loc in loc_nodes:
+            posts.append(loc.childNodes[0].data)
+        os.remove(siteMapName)
+    except :
+        print("************Error")
+        time.sleep(5)
+        os.system('python3 main.py')
+
+getUrls("https://hackeradda.com")
+getUrls("https://codingblog.online")
+
+print(len(posts))
 
 user_agents = [
     "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36",
@@ -69,7 +85,6 @@ user_agents = [
     "Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/7.0.55539 Mobile/12H143 Safari/600.1.4"
 ]
 
-use_vpn = 'yes'
 
 def closeExtraTabs(driver):
     tab_list = driver.window_handles
@@ -83,8 +98,7 @@ visit = 1
 while True:
     try:
         options = Options()
-        if use_vpn == "yes":
-            options.add_extension('./extension_1_6_0_0.crx')
+        options.add_extension('./extension_1_6_0_0.crx')
         options.add_argument("start-maximized")
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
@@ -92,19 +106,11 @@ while True:
         driver = webdriver.Chrome(options=options, service=s)
         driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": random.choice(user_agents)})
-        # print(driver.execute_script("return navigator.userAgent;"))
-        base_url = random.choice(urls)
-        # base_url = "https://www.whatsmyua.info/"
-        driver.get(base_url)
+        driver.get(random.choice(posts))
         closeExtraTabs(driver)
-        random.randint(10,20)
-
-
-        # print("Visiting to -> " + base_url)
+        time.sleep(random.randint(10,20))
         print("Visit count ->",visit)
         visit += 1
-
-        # driver.get(base_url)
         y = 0
         duration = int(random.randint(30,60))
         for timer in range(0,duration*25):
@@ -112,13 +118,10 @@ while True:
             y += 1
             time.sleep(1/25)
 
-        num = random.randint(1,2)
-
-        if num == 1:
-            base_url = random.choice(urls)
-            driver.get(base_url)
-            # print("Visiting to -> " + base_url)
+        if random.randint(1,2) == 1:
+            driver.get(random.choice(posts))
             print("Visit count ->",visit)
+            time.sleep(random.randint(10,20))
             visit += 1
             y = 0
             duration = int(random.randint(30,75))
@@ -128,7 +131,7 @@ while True:
                 time.sleep(1/25)
 
         driver.quit()
-        time.sleep(random.randint(5,20))
+        time.sleep(random.randint(1,2))
     except:
         print("Try Again....")
         time.sleep(10)
