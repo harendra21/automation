@@ -106,33 +106,39 @@ while True:
         driver = webdriver.Chrome(options=options, service=s)
         driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": random.choice(user_agents)})
+
+        time.sleep(10)
         driver.get(random.choice(posts))
         closeExtraTabs(driver)
-        time.sleep(random.randint(10,20))
+        time.sleep(random.randint(20,30))
         print("Visit count ->",visit)
         visit += 1
         y = 0
-        duration = int(random.randint(30,60))
-        for timer in range(0,duration*25):
+        duration = int(random.randint(20,30))
+        for timer in range(0,duration):
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
-            y += 1
-            time.sleep(1/25)
+            y += random.randint(10,60)
+            time.sleep(1)
 
         if random.randint(1,2) == 1:
-            driver.get(random.choice(posts))
+        # if 1 == 1:
+            driver.execute_script('window.location.href = "{}";'.format(random.choice(posts)))
+
+            # driver.get(random.choice(posts))
             print("Visit count ->",visit)
-            time.sleep(random.randint(10,20))
+            time.sleep(random.randint(20,30))
             visit += 1
             y = 0
-            duration = int(random.randint(30,75))
-            for timer in range(0,duration*25):
+            duration = int(random.randint(30,40))
+            for timer in range(0,duration):
                 driver.execute_script("window.scrollTo(0, "+str(y)+")")
-                y += 1
-                time.sleep(1/25)
+                y += random.randint(10,60)
+                time.sleep(1)
 
         driver.quit()
         time.sleep(random.randint(1,2))
     except:
+        driver.quit()
         print("Try Again....")
         time.sleep(10)
         os.system('python3 main.py')
