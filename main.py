@@ -4,37 +4,79 @@ from selenium.webdriver.chrome.options import Options
 import time
 import random
 from selenium.webdriver.edge.service import Service
-
-from xml.dom.minidom import parse
-import xml.dom.minidom
-import requests
 import os
 
-posts = []
-def getUrls(domain):
-    try :
-        siteMapName = 'sitemap.xml'
-        url = domain+'/sitemap.xml'
-        r = requests.get(url, allow_redirects=True)
-        open(siteMapName, 'wb').write(r.content)
-
-        xml_file = siteMapName
-
-        DOMTree = xml.dom.minidom.parse(xml_file)
-
-        root_node = DOMTree.documentElement
-
-        loc_nodes = root_node.getElementsByTagName("loc")
-        for loc in loc_nodes:
-            posts.append(loc.childNodes[0].data)
-        os.remove(siteMapName)
-    except :
-        print("************Error")
-        time.sleep(5)
-        os.system('python3 main.py')
-
-getUrls("https://hackeradda.com")
-getUrls("https://codingblog.online")
+posts = [
+    "https://hackeradda.com/about/",
+    "https://hackeradda.com/blog/",
+    "https://hackeradda.com/",
+    "https://hackeradda.com/tags/",
+    "https://hackeradda.com/post/10-fantastic-developer-tools-you-probably-do-not-use/",
+    "https://hackeradda.com/post/15-free-hosting-providers-for-web-developers/",
+    "https://hackeradda.com/post/6-points-to-consider-when-choosing-a-web-host-for-your-business/",
+    "https://hackeradda.com/post/everything-you-need-to-know-about-cpanel/",
+    "https://hackeradda.com/post/five-things-to-keep-in-mind-while-selecting-web-hosting-service/",
+    "https://hackeradda.com/post/free-cicd-and-integration-with-web-hosting-githubpage-travisci/",
+    "https://hackeradda.com/post/free-static-website-hosting-with-a-custom-domain-name/",
+    "https://hackeradda.com/post/free-web-hosting-and-domain-name/",
+    "https://hackeradda.com/post/how-to-choose-the-best-web-hosting-provider-the-ultimate-guide/",
+    "https://hackeradda.com/post/how-to-setup-cron-jobs-in-cpanel/",
+    "https://hackeradda.com/post/how-to-use-bluehost-to-create-your-own-wordpress-website/",
+    "https://hackeradda.com/post/i-want-to-learn-programming-but-dont-know-where-to-begin/",
+    "https://hackeradda.com/post/in-2022-the-best-web-hosting-and-domain-name-registration-services-to-use/",
+    "https://hackeradda.com/post/is-it-worth-using-free-web-hosting/",
+    "https://hackeradda.com/post/what-does-it-mean-to-host-a-website-anonymously/",
+    "https://hackeradda.com/post/why-should-you-use-ssd-web-hosting/",
+    "https://hackeradda.com/tags/coding/",
+    "https://hackeradda.com/tags/cpanel/",
+    "https://hackeradda.com/tags/best-hosting/",
+    "https://hackeradda.com/tags/free/",
+    "https://hackeradda.com/tags/free-web-hosting/",
+    "https://hackeradda.com/tags/programming/",
+    "https://hackeradda.com/tags/tools/",
+    "https://hackeradda.com/tags/web-hosting/",
+    "https://hackeradda.com/tags/website-hosting/",
+    "https://codingblog.online/about/",
+    "https://codingblog.online/blog/",
+    "https://codingblog.online/",
+    "https://codingblog.online/tags/",
+    "https://codingblog.online/post/10-strategies-to-increase-your-programming-logical-thinking-abilities/",
+    "https://codingblog.online/post/6-algorithms-every-developer-should-be-aware-of/",
+    "https://codingblog.online/post/8-google-courses-that-offer-free-certifications/",
+    "https://codingblog.online/post/a-guide-to-create-pure-css-tooltips/",
+    "https://codingblog.online/post/a-more-effective-method-of-coding/",
+    "https://codingblog.online/post/create-an-rgb-color-picker-using-html-and-bootstrap/",
+    "https://codingblog.online/post/create-elegant-javascript-code-using-shortcircuit-evaluation/",
+    "https://codingblog.online/post/during-coding-interviews-there-are-three-javascript-queries-to-watch-out-for/",
+    "https://codingblog.online/post/every-programmer-should-be-aware-of-these-10-javascript-hacks/",
+    "https://codingblog.online/post/how-can-you-improve-your-coding-skills/",
+    "https://codingblog.online/post/how-i-would-learn-to-code-if-i-could-start-over/",
+    "https://codingblog.online/post/how-to-improve-your-programming-problem-solving-skills/",
+    "https://codingblog.online/post/how-to-learn-programmming/",
+    "https://codingblog.online/post/how-to-make-a-simple-html-5-webpage/",
+    "https://codingblog.online/post/how-to-make-the-most-of-your-programming-workflow/",
+    "https://codingblog.online/post/how-to-think-like-a-programmer/",
+    "https://codingblog.online/post/how-to-write-functions-like-a-senior-developer-eight-tips/",
+    "https://codingblog.online/post/i-wish-i-had-known-about-these-tools-when-i-first-started-coding/",
+    "https://codingblog.online/post/programming-is-a-difficult-task-that-is-exactly-why-you-should-study-it/",
+    "https://codingblog.online/post/the-all-in-one-programming-language/",
+    "https://codingblog.online/post/these-5-frontend-development-tools-will-help-you-save-a-lot-of-time/",
+    "https://codingblog.online/post/what-can-you-do-to-improve-your-logical-thinking/",
+    "https://codingblog.online/post/what-to-do-if-youre-stuck-in-a-coding-tutorial/",
+    "https://codingblog.online/tags/algorithms/",
+    "https://codingblog.online/tags/chrome-extensions/",
+    "https://codingblog.online/tags/coding/",
+    "https://codingblog.online/tags/css/",
+    "https://codingblog.online/tags/frontend/",
+    "https://codingblog.online/tags/html/",
+    "https://codingblog.online/tags/interview/",
+    "https://codingblog.online/tags/javascript/",
+    "https://codingblog.online/tags/learn/",
+    "https://codingblog.online/tags/programming/",
+    "https://codingblog.online/tags/tips/",
+    "https://codingblog.online/tags/vscode-extensions/",
+    "https://codingblog.online/tags/webdev/",
+]
 
 print(len(posts))
 
@@ -110,7 +152,7 @@ while True:
         time.sleep(10)
         driver.get(random.choice(posts))
         closeExtraTabs(driver)
-        time.sleep(random.randint(20,30))
+        time.sleep(random.randint(20,40))
         print("Visit count ->",visit)
         visit += 1
         y = 0
@@ -119,14 +161,15 @@ while True:
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
             y += random.randint(10,60)
             time.sleep(1)
+        time.sleep(random.randint(20,40))
 
-        if random.randint(1,2) == 1:
-        # if 1 == 1:
+        # if random.randint(1,2) == 1:
+        if 1 == 1:
             driver.execute_script('window.location.href = "{}";'.format(random.choice(posts)))
 
             # driver.get(random.choice(posts))
             print("Visit count ->",visit)
-            time.sleep(random.randint(20,30))
+            time.sleep(random.randint(20,40))
             visit += 1
             y = 0
             duration = int(random.randint(30,40))
@@ -134,6 +177,7 @@ while True:
                 driver.execute_script("window.scrollTo(0, "+str(y)+")")
                 y += random.randint(10,60)
                 time.sleep(1)
+            time.sleep(random.randint(20,40))
 
         driver.quit()
         time.sleep(random.randint(1,2))
