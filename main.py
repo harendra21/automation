@@ -7,13 +7,12 @@ from selenium.webdriver.edge.service import Service
 import os
 
 posts = [
-    "https://hackeradda.com/about/",
     "https://hackeradda.com/blog/",
     "https://hackeradda.com/",
-    "https://hackeradda.com/tags/",
     "https://hackeradda.com/post/10-fantastic-developer-tools-you-probably-do-not-use/",
     "https://hackeradda.com/post/15-free-hosting-providers-for-web-developers/",
     "https://hackeradda.com/post/6-points-to-consider-when-choosing-a-web-host-for-your-business/",
+    "https://hackeradda.com/post/consider-before-you-code/",
     "https://hackeradda.com/post/everything-you-need-to-know-about-cpanel/",
     "https://hackeradda.com/post/five-things-to-keep-in-mind-while-selecting-web-hosting-service/",
     "https://hackeradda.com/post/free-cicd-and-integration-with-web-hosting-githubpage-travisci/",
@@ -25,22 +24,23 @@ posts = [
     "https://hackeradda.com/post/i-want-to-learn-programming-but-dont-know-where-to-begin/",
     "https://hackeradda.com/post/in-2022-the-best-web-hosting-and-domain-name-registration-services-to-use/",
     "https://hackeradda.com/post/is-it-worth-using-free-web-hosting/",
+    "https://hackeradda.com/post/programming-fundamentals-compiler-and-interpreter/",
     "https://hackeradda.com/post/what-does-it-mean-to-host-a-website-anonymously/",
     "https://hackeradda.com/post/why-should-you-use-ssd-web-hosting/",
+    "https://hackeradda.com/tags/best-hosting/",
     "https://hackeradda.com/tags/coding/",
     "https://hackeradda.com/tags/cpanel/",
-    "https://hackeradda.com/tags/best-hosting/",
     "https://hackeradda.com/tags/free/",
     "https://hackeradda.com/tags/free-web-hosting/",
+    "https://hackeradda.com/tags/learn-to-code/",
     "https://hackeradda.com/tags/programming/",
     "https://hackeradda.com/tags/tools/",
     "https://hackeradda.com/tags/web-hosting/",
     "https://hackeradda.com/tags/website-hosting/",
-    "https://codingblog.online/about/",
     "https://codingblog.online/blog/",
     "https://codingblog.online/",
-    "https://codingblog.online/tags/",
     "https://codingblog.online/post/10-strategies-to-increase-your-programming-logical-thinking-abilities/",
+    "https://codingblog.online/post/50-useful-python-scripts-free-pdf-download/",
     "https://codingblog.online/post/6-algorithms-every-developer-should-be-aware-of/",
     "https://codingblog.online/post/8-google-courses-that-offer-free-certifications/",
     "https://codingblog.online/post/a-guide-to-create-pure-css-tooltips/",
@@ -73,6 +73,7 @@ posts = [
     "https://codingblog.online/tags/javascript/",
     "https://codingblog.online/tags/learn/",
     "https://codingblog.online/tags/programming/",
+    "https://codingblog.online/tags/python/",
     "https://codingblog.online/tags/tips/",
     "https://codingblog.online/tags/vscode-extensions/",
     "https://codingblog.online/tags/webdev/",
@@ -156,12 +157,12 @@ while True:
         print("Visit count ->",visit)
         visit += 1
         y = 0
-        duration = int(random.randint(20,30))
+        duration = int(random.randint(5,15))
         for timer in range(0,duration):
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
             y += random.randint(10,60)
             time.sleep(1)
-        time.sleep(random.randint(20,40))
+        time.sleep(random.randint(10,30))
 
         # if random.randint(1,2) == 1:
         if 1 == 1:
@@ -169,7 +170,7 @@ while True:
 
             # driver.get(random.choice(posts))
             print("Visit count ->",visit)
-            time.sleep(random.randint(20,40))
+            time.sleep(random.randint(5,15))
             visit += 1
             y = 0
             duration = int(random.randint(30,40))
@@ -177,7 +178,7 @@ while True:
                 driver.execute_script("window.scrollTo(0, "+str(y)+")")
                 y += random.randint(10,60)
                 time.sleep(1)
-            time.sleep(random.randint(20,40))
+            time.sleep(random.randint(15,45))
 
         driver.quit()
         time.sleep(random.randint(1,2))
