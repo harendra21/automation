@@ -5,6 +5,11 @@ import random
 from selenium.webdriver.chrome.options import Options
 import os
 
+time.sleep(random.randint(4,8))
+
+vDisplay = False
+vDisplayVisible = False
+
 posts = [
     "https://hackeradda.com/blog/",
     "https://hackeradda.com/",
@@ -132,12 +137,11 @@ def closeExtraTabs(driver):
         driver.close()
         driver.switch_to.window(tab_list[0])
 
-
-
 def visit():
     try:
-        display = Display(visible=1, size=(random.randint(320, 1920), random.randint(600, 750)))
-        display.start()
+        if vDisplay:
+            display = Display(visible=vDisplayVisible, size=(random.randint(320, 1920), random.randint(700, 750)))
+            display.start()
 
         options = Options()
         options.add_extension('./ultra.crx')
@@ -175,11 +179,14 @@ def visit():
 
         driver.quit()
         display.stop()
+        if vDisplay:
+                display.stop()
     except:
         driver.quit()
         display.stop()
         print("Try Again....")
-        time.sleep(random.randint(5,8))
+        if vDisplay:
+                display.stop()
         os.system('python3 ultra.py')
 while True:
     visit()

@@ -11,9 +11,10 @@ import http.client as httplib
 from pyvirtualdisplay import Display
 import urllib.request as urllib2
 
+time.sleep(random.randint(4,8))
 
 vDisplay = False
-vDisplayVisible = True
+vDisplayVisible = False
 
 def internet_on():
     try:
@@ -22,12 +23,12 @@ def internet_on():
     except urllib2.URLError as err: 
         return False
 
-while internet_on() == False:
-    print("* * * * * No Internet * * * * *")
-    time.sleep(10)
-    internet_on()
-else :
-    print("* * * * * Internet Working * * * * *")
+# while internet_on() == False:
+#     print("* * * * * No Internet * * * * *")
+#     time.sleep(10)
+#     internet_on()
+# else :
+#     print("* * * * * Internet Working * * * * *")
 
 postsData = open('./posts.json')
 posts = json.load(postsData)['posts']
@@ -92,7 +93,7 @@ try:
         options.add_argument("--autoplay-policy=no-user-gesture-required")
         options.add_argument("start-maximized")
         driver = webdriver.Chrome(options=options)
-        # driver.set_page_load_timeout(30)
+        driver.set_page_load_timeout(90)
 
         try:
             driver.get('chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/html/foreground.html')
@@ -103,6 +104,7 @@ try:
             time.sleep(6)
             closeExtraTabs(driver)
             time.sleep(1)
+
 
             clickElem(By.CSS_SELECTOR, "#screen-tooltips-template > div.navigation > div > div:nth-child(3) > div > div > button", driver)
             time.sleep(0.5)
@@ -120,53 +122,30 @@ try:
             time.sleep(1)
             driver.find_element(By.CSS_SELECTOR, "#menuContainer > div.fullScreen.menuLogin > form > div:nth-child(3) > div > div > input[type=text]").send_keys(email)
             driver.find_element(By.CSS_SELECTOR, "#menuContainer > div.fullScreen.menuLogin > form > div:nth-child(4) > div > div > input[type=password]").send_keys(password)
+
             clickElem(By.CSS_SELECTOR, "#submit-form-button",driver)
             
-            time.sleep(8)
+            time.sleep(5)
             # select region
             clickElem(By.CSS_SELECTOR, "#content > div.current-region > div > div.current-region-upper-block",driver)
-            time.sleep(1)
-            # driver.find_element(
-            #     By.XPATH, '//*[@id="region-list"]/div[5]').click()
-            # time.sleep(.5)
-            # driver.find_element(
-            #     By.XPATH, '//*[@id="region-list"]/div[7]').click()
-            # time.sleep(.5)
-
-            # freeRegions = ['/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div[2]',
-            #                '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div[3]',
-            #                '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div[5]/div[2]/div/div[1]',
-            #                '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div[5]/div[2]/div/div[2]',
-            #                '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div[6]',
-            #                '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div[7]/div[2]/div/div[1]',
-            #                '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div[7]/div[2]/div/div[2]',
-            #                ]
-            # driver.find_element(By.XPATH, random.choice(freeRegions)).click()
-            
+            time.sleep(2)
             collapse = [2, 8, 18, 20, 23, 27, 28, 41, 43, 47, 53, 55, 56]
 
-            # randomRegion = random.randint(1, 56)
-            randomRegion = random.choice([2, 8, 22, 36])
-            # randomRegion = random.choice([2, 8])
-            
-            # if random.randint(1, 3) == 1:
-            #     randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
-            # else:
-            #     randomRegion = random.choice([8])
-
+            # randomRegion = random.randint(1, 56) # for all regions
             # randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
-            # print(randomRegion)
-
+            
+            randomRegion = random.choice([2, 8, 55])
             if randomRegion in collapse:
-              clickElem(By.XPATH, '//*[@id="region-list"]/div['+str(randomRegion)+']',driver)
-              time.sleep(3)
-              sub = {2: 5, 8: 3, 18: 3, 20: 5, 23: 3, 27: 3, 28: 3, 41: 7, 43: 3, 47: 2, 53: 3, 55: 12, 56: 2}
-              clickElem(By.XPATH, '//*[@id="region-list"]/div['+str(randomRegion)+']/div[2]/div/div['+str(sub.get(randomRegion))+']',driver)
-              
+                
+                clickElem(By.XPATH, '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div['+str(randomRegion)+']',driver)
+                time.sleep(1)
+                sub = {2: 5, 8: 3, 18: 3, 20: 5, 23: 3, 27: 3, 28: 3, 41: 7, 43: 3, 47: 2, 53: 3, 55: 12, 56: 2}
+                subregion = str(random.randint(1,sub.get(randomRegion)))
+                clickElem(By.XPATH, '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div['+str(randomRegion)+']/div[2]/div/div['+subregion+']',driver)
             else:
                clickElem(By.XPATH, '//*[@id="region-list"]/div['+str(randomRegion)+']',driver)
         
-            time.sleep(3)
+            time.sleep(1)
             clickElem(By.CSS_SELECTOR, "#mainBtn > span",driver)
             time.sleep(6)
             retry = 0
@@ -176,12 +155,11 @@ try:
                     print("VPN is not connecting")
                     driver.quit()
                     time.sleep(random.randint(4,8))
-                    os.system("python3 veepn.py")
+                    os.system("python veepn.py")
                 else:    
-                    element = driver.find_element(
-                        By.CSS_SELECTOR, "#mainBtn > div")
+                    element = driver.find_element( By.CSS_SELECTOR, "#mainBtn > div")
                     text = element.get_attribute('innerText')
-                    print(text)
+                    # print(text)
                     if text == 'VPN is ON':
                         isConnected = True
                     if text == 'VPN is OFF':
@@ -192,18 +170,20 @@ try:
             location = ele.get_attribute('innerText')
             print('Location: ' + location)
             
+            
             readStory(random.choice(posts), driver,1)
             if random.randint(1,2) == 1:
                 readStory(random.choice(posts), driver,2)
+            print("=======================================")
             driver.quit()
+            if vDisplay:
+                display.stop()
         except:
             print("Something went wrong!.  Trying again......")
             driver.quit()
             if vDisplay:
                 display.stop()
-            time.sleep(random.randint(4,8))
             os.system("python3 veepn.py")
 except:
     print("Oops!  Something went wrong!.  Trying again.")
-    time.sleep(random.randint(4,8))
     os.system("python3 veepn.py")
