@@ -5,13 +5,12 @@ import os
 import random
 from datetime import datetime
 import json
-import random
 from selenium.webdriver.common.by import By
 import http.client as httplib
 from pyvirtualdisplay import Display
 import urllib.request as urllib2
 
-time.sleep(random.randint(4,8))
+# time.sleep(random.randint(0,10))
 
 vDisplay = False
 vDisplayVisible = False
@@ -47,7 +46,7 @@ def closeExtraTabs(driver):
 
 
 def readStory(story, driver, count):
-
+    start = datetime.now()
     if count > 1:
         driver.execute_script("window.open('');")
         driver.switch_to.window(driver.window_handles[count -1])
@@ -58,15 +57,15 @@ def readStory(story, driver, count):
         closeExtraTabs(driver)
     
     print(driver.title)
-    scheight = .01
-    time.sleep(random.randint(10,15))
-    while scheight < 1:
-        rand_sec = random.randint(0, 20)
-        driver.execute_script(
-            "window.scrollTo(0, document.body.scrollHeight*%s);" % scheight)
-        scheight += .002 * rand_sec
-        time.sleep(0.2 * rand_sec)
-    time.sleep(random.randint(10,15))
+    y = 0
+    height = driver.execute_script("return document.body.scrollHeight")
+    while height > y:
+        y = int(y) + random.randint(20,60)
+        driver.execute_script("window.scrollTo(0, "+str(y)+")")
+        time.sleep(1)
+    
+    timeTaken = datetime.now() - start
+    print("Time Taken: "+str(timeTaken))
 
 def clickElem(by,selector,driver):
     elem = driver.find_element(by, selector)
@@ -83,23 +82,22 @@ try:
         email = "harendra"+today+"@gmail.com"
         password = today
 
-        options = Options()
-        ua = random.choice(agents)
-        options.add_argument(f'user-agent={ua}')
-        options.add_extension('./veepn.crx')
-        options.add_experimental_option(
-            "excludeSwitches", ["enable-automation","enable-logging"])
-        options.add_experimental_option('useAutomationExtension', False)
-        options.add_argument("--autoplay-policy=no-user-gesture-required")
-        options.add_argument("start-maximized")
-        driver = webdriver.Chrome(options=options)
-        driver.set_page_load_timeout(90)
-
         try:
+            options = Options()
+            ua = random.choice(agents)
+            options.add_argument(f'user-agent={ua}')
+            options.add_extension('./veepn.crx')
+            options.add_experimental_option(
+                "excludeSwitches", ["enable-automation","enable-logging"])
+            options.add_experimental_option('useAutomationExtension', False)
+            options.add_argument("--autoplay-policy=no-user-gesture-required")
+            options.add_argument("start-maximized")
+            driver = webdriver.Chrome(options=options)
+            driver.set_page_load_timeout(90)
             driver.get('chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/html/foreground.html')
-            # if random.randint(1,3) == 1:
-            #     driver.set_window_size(random.randint(425, 1366), random.randint(700, 800))
-            #     driver.set_window_position(random.randint(0, 800), 0, windowHandle='current')
+            if random.randint(1,2) == 1:
+                driver.set_window_size(random.randint(425, 1366), random.randint(700, 800))
+                driver.set_window_position(random.randint(0, 800), 0, windowHandle='current')
             
             time.sleep(6)
             closeExtraTabs(driver)
@@ -155,7 +153,7 @@ try:
                     print("VPN is not connecting")
                     driver.quit()
                     time.sleep(random.randint(4,8))
-                    os.system("python veepn.py")
+                    os.system("python3 veepn.py")
                 else:    
                     element = driver.find_element( By.CSS_SELECTOR, "#mainBtn > div")
                     text = element.get_attribute('innerText')
@@ -169,7 +167,6 @@ try:
             ele = driver.find_element(By.CSS_SELECTOR, "#content > div.current-region > div > div.current-region-upper-block > div > div.current-region-name-wrapper")
             location = ele.get_attribute('innerText')
             print('Location: ' + location)
-            
             
             readStory(random.choice(posts), driver,1)
             if random.randint(1,2) == 1:
