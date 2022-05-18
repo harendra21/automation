@@ -10,24 +10,11 @@ import http.client as httplib
 from pyvirtualdisplay import Display
 import urllib.request as urllib2
 
-# time.sleep(random.randint(0,10))
+time.sleep(random.randint(0,10))
 
 vDisplay = False
 vDisplayVisible = False
 
-def internet_on():
-    try:
-        urllib2.urlopen('https://google.com/', timeout=1)
-        return True
-    except urllib2.URLError as err: 
-        return False
-
-# while internet_on() == False:
-#     print("* * * * * No Internet * * * * *")
-#     time.sleep(10)
-#     internet_on()
-# else :
-#     print("* * * * * Internet Working * * * * *")
 
 postsData = open('./posts.json')
 posts = json.load(postsData)['posts']
@@ -44,6 +31,9 @@ def closeExtraTabs(driver):
             driver.close()
             driver.switch_to.window(tab_list[tabs - 1])
 
+def clickElem(by,selector,driver):
+    elem = driver.find_element(by, selector)
+    driver.execute_script("arguments[0].click();", elem)
 
 def readStory(story, driver, count):
     start = datetime.now()
@@ -55,21 +45,18 @@ def readStory(story, driver, count):
     
     if count == 1:
         closeExtraTabs(driver)
-    
     print(driver.title)
     y = 0
     height = driver.execute_script("return document.body.scrollHeight")
     while height > y:
-        y = int(y) + random.randint(20,60)
+        y = int(y) + random.randint(160,200)
         driver.execute_script("window.scrollTo(0, "+str(y)+")")
-        time.sleep(1)
-    
-    timeTaken = datetime.now() - start
-    print("Time Taken: "+str(timeTaken))
+        time.sleep(2)
 
-def clickElem(by,selector,driver):
-    elem = driver.find_element(by, selector)
-    driver.execute_script("arguments[0].click();", elem)
+    time.sleep(random.randint(20,30))
+    print("Time Taken: "+str(datetime.now() - start))
+
+
 
 try:
     while True:
@@ -87,8 +74,7 @@ try:
             ua = random.choice(agents)
             options.add_argument(f'user-agent={ua}')
             options.add_extension('./veepn.crx')
-            options.add_experimental_option(
-                "excludeSwitches", ["enable-automation","enable-logging"])
+            options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
             options.add_experimental_option('useAutomationExtension', False)
             options.add_argument("--autoplay-policy=no-user-gesture-required")
             options.add_argument("start-maximized")
@@ -152,7 +138,6 @@ try:
                 if retry > 10:
                     print("VPN is not connecting")
                     driver.quit()
-                    time.sleep(random.randint(4,8))
                     os.system("python3 veepn.py")
                 else:    
                     element = driver.find_element( By.CSS_SELECTOR, "#mainBtn > div")
@@ -169,18 +154,19 @@ try:
             print('Location: ' + location)
             
             readStory(random.choice(posts), driver,1)
+            readStory(random.choice(posts), driver,2)
             if random.randint(1,2) == 1:
-                readStory(random.choice(posts), driver,2)
+                readStory(random.choice(posts), driver,3)
             print("=======================================")
             driver.quit()
             if vDisplay:
                 display.stop()
         except:
-            print("Something went wrong!.  Trying again......")
+            print("Something went wrong!. Trying again......")
             driver.quit()
             if vDisplay:
                 display.stop()
             os.system("python3 veepn.py")
 except:
-    print("Oops!  Something went wrong!.  Trying again.")
+    print("Oops!  Something went wrong!. Trying again.")
     os.system("python3 veepn.py")
