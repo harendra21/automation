@@ -1,3 +1,4 @@
+# pip3 install requests-random-user-agent
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
@@ -9,8 +10,10 @@ from selenium.webdriver.common.by import By
 import http.client as httplib
 from pyvirtualdisplay import Display
 import urllib.request as urllib2
+import requests
+import requests_random_user_agent
 
-time.sleep(random.randint(0,10))
+# time.sleep(random.randint(0,10))
 
 vDisplay = False
 vDisplayVisible = False
@@ -18,8 +21,8 @@ vDisplayVisible = False
 
 postsData = open('./posts.json')
 posts = json.load(postsData)['posts']
-data = open('./userAgents.json')
-agents = json.load(data)['agents']
+# data = open('./userAgents.json')
+# agents = json.load(data)['agents']
 
 def closeExtraTabs(driver):
     tab_list = driver.window_handles
@@ -71,7 +74,8 @@ try:
 
         try:
             options = Options()
-            ua = random.choice(agents)
+            sess = requests.Session()
+            ua = sess.headers['User-Agent']
             options.add_argument(f'user-agent={ua}')
             options.add_extension('./veepn.crx')
             options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
@@ -118,7 +122,7 @@ try:
             # randomRegion = random.randint(1, 56) # for all regions
             # randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
             
-            randomRegion = random.choice([2, 8, 55])
+            randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
             if randomRegion in collapse:
                 
                 clickElem(By.XPATH, '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div['+str(randomRegion)+']',driver)
