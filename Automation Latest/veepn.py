@@ -1,5 +1,5 @@
 # 873a1cb1e1fd6b2cbe4008440ba71eb6
-# pip3 install requests-random-user-agent
+# pip3 install requests-random-user-agent logdna
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import time
