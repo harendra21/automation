@@ -14,9 +14,14 @@ import urllib.request as urllib2
 import requests
 import requests_random_user_agent
 import logging
-from logdna import LogDNAHandler
-import socket
 import sys
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+sentry_sdk.init(
+    "https://d096b23f59334172b63d968435501637@o514513.ingest.sentry.io/5617820",
+    traces_sample_rate=1.0
+)
 
 sys.tracebacklimit=0
 # time.sleep(random.randint(0,10))
@@ -24,29 +29,18 @@ sys.tracebacklimit=0
 vDisplay = False
 vDisplayVisible = False
 
-
 postsData = open('./posts.json')
 posts = json.load(postsData)['posts']
 # data = open('./userAgents.json')
 # agents = json.load(data)['agents']
 
 def errorLog(err):
-    key = '873a1cb1e1fd6b2cbe4008440ba71eb6'
-    log = logging.getLogger('logdna')
-    log.setLevel(logging.DEBUG)
-    options = {
-        'hostname': socket.gethostname()
-    }
-    options['index_meta'] = True
-    test = LogDNAHandler(key, options)
-    err = err.strip('\n')
-    err = err.strip('\t')
-    # print(err)
-    log.addHandler(test)
-
-    log.error(err, {'app': 'Veepn'})
-
-
+    err = err.replace('\n','')
+    err = err.replace('\t','')
+    err = err.replace('(Session info: chrome=101.0.4951.64)','')
+    err = err.split("Stacktrace:",1)[0]
+    print(err)
+    logging.error(err)
 
 def closeExtraTabs(driver):
     tab_list = driver.window_handles
@@ -190,9 +184,7 @@ while True:
         if vDisplay:
             display.stop()
     except Exception as e:
-        print("---------")
         errorLog(str(e))
-        # print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
         driver.quit()
         if vDisplay:
             display.stop()
