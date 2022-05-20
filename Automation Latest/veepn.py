@@ -1,3 +1,4 @@
+# 873a1cb1e1fd6b2cbe4008440ba71eb6
 # pip3 install requests-random-user-agent
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -13,7 +14,11 @@ import urllib.request as urllib2
 import requests
 import requests_random_user_agent
 import logging
+from logdna import LogDNAHandler
+import socket
+import sys
 
+sys.tracebacklimit=0
 # time.sleep(random.randint(0,10))
 
 vDisplay = False
@@ -24,6 +29,24 @@ postsData = open('./posts.json')
 posts = json.load(postsData)['posts']
 # data = open('./userAgents.json')
 # agents = json.load(data)['agents']
+
+def errorLog(err):
+    key = '873a1cb1e1fd6b2cbe4008440ba71eb6'
+    log = logging.getLogger('logdna')
+    log.setLevel(logging.DEBUG)
+    options = {
+        'hostname': socket.gethostname()
+    }
+    options['index_meta'] = True
+    test = LogDNAHandler(key, options)
+    err = err.strip('\n')
+    err = err.strip('\t')
+    # print(err)
+    log.addHandler(test)
+
+    log.error(err, {'app': 'Veepn'})
+
+
 
 def closeExtraTabs(driver):
     tab_list = driver.window_handles
@@ -93,6 +116,7 @@ while True:
         time.sleep(1)
 
 
+
         clickElem(By.CSS_SELECTOR, "#screen-tooltips-template > div.navigation > div > div:nth-child(3) > div > div > button", driver)
         time.sleep(0.5)
 
@@ -140,8 +164,8 @@ while True:
         while isConnected == False:
             if retry > 10:
                 print("VPN is not connecting")
+                errorLog("VPN is not connecting")
                 driver.quit()
-                os.system("python3 veepn.py")
             else:    
                 element = driver.find_element( By.CSS_SELECTOR, "#mainBtn > div")
                 text = element.get_attribute('innerText')
@@ -149,6 +173,7 @@ while True:
                 if text == 'VPN is ON':
                     isConnected = True
                 if text == 'VPN is OFF':
+                    errorLog("VPN is OFF")
                     driver.quit()
                 time.sleep(2)
                 retry = retry + 1
@@ -165,12 +190,9 @@ while True:
         if vDisplay:
             display.stop()
     except Exception as e:
-        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-        print(str(e))
-        logging.basicConfig(filename='app.log', filemode='a', format='%(name)s - %(levelname)s - %(message)s')
-        logging.error("Exception occurred", exc_info=True)
-        logging.error("-------------------------------------")
-        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        print("---------")
+        errorLog(str(e))
+        # print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
         driver.quit()
         if vDisplay:
             display.stop()
