@@ -13,7 +13,6 @@ import urllib.request as urllib2
 import requests
 import requests_random_user_agent
 import logging
-import sys
 
 # time.sleep(random.randint(0,10))
 
