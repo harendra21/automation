@@ -8,15 +8,15 @@ import random
 from datetime import datetime
 import json
 from selenium.webdriver.common.by import By
-import http.client as httplib
 from pyvirtualdisplay import Display
-import urllib.request as urllib2
 import requests
 import requests_random_user_agent
 import logging
 import sys
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
+import socket
+from sentry_sdk import set_tag
 
 sentry_sdk.init(
     "https://d096b23f59334172b63d968435501637@o514513.ingest.sentry.io/5617820",
@@ -31,15 +31,15 @@ vDisplayVisible = False
 
 postsData = open('./posts.json')
 posts = json.load(postsData)['posts']
-# data = open('./userAgents.json')
-# agents = json.load(data)['agents']
+data = open('./userAgents.json')
+agents = json.load(data)['agents']
 
 def errorLog(err):
     err = err.replace('\n','')
     err = err.replace('\t','')
     err = err.replace('(Session info: chrome=101.0.4951.64)','')
     err = err.split("Stacktrace:",1)[0]
-    print(err)
+    set_tag("hostname", socket.gethostname())
     logging.error(err)
 
 def closeExtraTabs(driver):
@@ -67,6 +67,7 @@ def readStory(story, driver, count):
     if count == 1:
         closeExtraTabs(driver)
     print(driver.title)
+    time.sleep(random.randint(5,8))
     y = 0
     height = driver.execute_script("return document.body.scrollHeight")
     while height > y:
@@ -89,9 +90,11 @@ while True:
     password = today
 
     try:
-        options = Options()
         sess = requests.Session()
-        ua = sess.headers['User-Agent']
+        # ua = sess.headers['User-Agent']
+        ua = random.choice(agents)
+        options = Options()
+        
         options.add_argument(f'user-agent={ua}')
         options.add_extension('./veepn.crx')
         options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
@@ -107,12 +110,12 @@ while True:
         
         time.sleep(6)
         closeExtraTabs(driver)
-        time.sleep(1)
+        time.sleep(2)
 
 
 
         clickElem(By.CSS_SELECTOR, "#screen-tooltips-template > div.navigation > div > div:nth-child(3) > div > div > button", driver)
-        time.sleep(0.5)
+        time.sleep(1)
 
         clickElem(By.CSS_SELECTOR, "#screen-tooltips-template > div.navigation > div > div:nth-child(3) > div > div > button",driver)
         time.sleep(1)
@@ -126,6 +129,7 @@ while True:
         
         time.sleep(1)
         driver.find_element(By.CSS_SELECTOR, "#menuContainer > div.fullScreen.menuLogin > form > div:nth-child(3) > div > div > input[type=text]").send_keys(email)
+        time.sleep(1)
         driver.find_element(By.CSS_SELECTOR, "#menuContainer > div.fullScreen.menuLogin > form > div:nth-child(4) > div > div > input[type=password]").send_keys(password)
         time.sleep(3)
         clickElem(By.CSS_SELECTOR, "#submit-form-button",driver)
@@ -139,7 +143,8 @@ while True:
         # randomRegion = random.randint(1, 56) # for all regions
         # randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
         
-        randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
+        # randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
+        randomRegion = random.choice([2, 8, 53, 18, 49, 34])
         if randomRegion in collapse:
             
             clickElem(By.XPATH, '/html/body/div/div/div/div[2]/div/div/div[2]/div/div/div/div['+str(randomRegion)+']',driver)
@@ -150,16 +155,18 @@ while True:
         else:
             clickElem(By.XPATH, '//*[@id="region-list"]/div['+str(randomRegion)+']',driver)
     
-        time.sleep(1)
+        time.sleep(2)
         clickElem(By.CSS_SELECTOR, "#mainBtn > span",driver)
-        time.sleep(6)
+        time.sleep(8)
         retry = 0
         isConnected = False
         while isConnected == False:
             if retry > 10:
-                print("VPN is not connecting")
-                errorLog("VPN is not connecting")
+                # print("VPN is not connecting")
+                logging.info("VPN is not connecting")
                 driver.quit()
+                time.sleep(4)
+                os.system("python3 veepn.py")
             else:    
                 element = driver.find_element( By.CSS_SELECTOR, "#mainBtn > div")
                 text = element.get_attribute('innerText')
@@ -167,13 +174,18 @@ while True:
                 if text == 'VPN is ON':
                     isConnected = True
                 if text == 'VPN is OFF':
-                    errorLog("VPN is OFF")
+                    logging.info("VPN is OFF")
                     driver.quit()
+                    time.sleep(4)
+                    os.system("python3 veepn.py")
                 time.sleep(2)
                 retry = retry + 1
+        
+        time.sleep(2)
         ele = driver.find_element(By.CSS_SELECTOR, "#content > div.current-region > div > div.current-region-upper-block > div > div.current-region-name-wrapper")
         location = ele.get_attribute('innerText')
-        print('Location: ' + location)
+        
+        print('Location: ' + location.replace('\n', ' - '))
         
         readStory(random.choice(posts), driver,1)
         readStory(random.choice(posts), driver,2)
