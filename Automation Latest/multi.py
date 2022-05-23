@@ -93,6 +93,10 @@ def closeExtraTabs(driver):
             driver.close()
             driver.switch_to.window(tab_list[tabs - 1])
 
+def clickElem(by,selector,driver):
+    elem = driver.find_element(by, selector)
+    driver.execute_script("arguments[0].click();", elem)
+
 def readStory(story, driver):
     driver.get(story)
     print(driver.title)
@@ -259,7 +263,7 @@ def connectUltrasurf(driver):
     closeExtraTabs(driver)
 
 socket.setdefaulttimeout(10)
-vpn = random.choice([1,2,3,4,5])
+vpn = random.choice([3,4,5])
 posts = getPosts()
 print(len(posts))
 agents = getUserAgents()

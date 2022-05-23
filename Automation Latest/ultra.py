@@ -7,6 +7,7 @@ from datetime import datetime
 import json
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from sys import platform
+from selenium.webdriver.common.by import By
 
 
 # time.sleep(random.randint(4,8))
@@ -32,6 +33,10 @@ posts = getPosts()
 print("Total posts - ",len(posts))
 
 agents = getUserAgents()
+
+def clickElem(by,selector,driver):
+    elem = driver.find_element(by, selector)
+    driver.execute_script("arguments[0].click();", elem)
 
 def closeExtraTabs(driver):
     tab_list = driver.window_handles
