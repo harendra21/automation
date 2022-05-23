@@ -7,7 +7,6 @@ import json
 from selenium.webdriver.common.by import By
 from pyvirtualdisplay import Display
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from proxy_checking import ProxyChecker
 import urllib.request , socket
 from sys import platform
 
