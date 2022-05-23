@@ -123,7 +123,7 @@ while True:
         options.add_argument("--dns-prefetch-disable")
         options.add_argument("--disable-gpu")
         options.add_argument('--start-maximized')
-        options.add_argument('--single-process')
+        # options.add_argument('--single-process')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument('--disable-blink-features=AutomationControlled')
@@ -131,7 +131,7 @@ while True:
         
 
         caps = DesiredCapabilities().CHROME
-        caps["pageLoadStrategy"] = "eager"
+        caps["pageLoadStrategy"] = "normal"
         driver = webdriver.Chrome(desired_capabilities=caps, options=options)
         driver.set_page_load_timeout(150)
         driver.get('chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/html/foreground.html')

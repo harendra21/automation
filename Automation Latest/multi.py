@@ -10,8 +10,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import urllib.request , socket
 from sys import platform
 
-
-
 def is_bad_proxy(pip):    
     try:        
         proxy_handler = urllib.request.ProxyHandler({'http': pip})        
@@ -101,13 +99,13 @@ def readStory(story, driver):
     driver.get(story)
     print(driver.title)
     scheight = .01
-    time.sleep(random.randint(10,15))
+    time.sleep(random.randint(20,30))
     while scheight < 1:
         rand_sec = random.randint(0, 20)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight*%s);" % scheight)
         scheight += .002 * rand_sec
         time.sleep(0.2 * rand_sec)
-    time.sleep(random.randint(10,15))
+    time.sleep(random.randint(20,30))
     clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
 
 def connectUVPN(driver):
@@ -255,6 +253,58 @@ def connectZenmate(driver):
     driver.execute_script("arguments[0].click();", element)
     time.sleep(5)
 
+def connectZenmateWithLogin(driver):
+    print("Zenmate With Login")
+    driver.get('chrome-extension://fdcgdnkidjaadafnichfpabhfomcebme/index.html')
+    time.sleep(6)
+    closeExtraTabs(driver)
+    time.sleep(1)
+
+    element = driver.find_element(By.XPATH,"/html/body/app-root/main/app-onboarding/div/div[1]/div/img[1]")
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(1)
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(1)
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(1)
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(1)
+
+    
+    element = driver.find_element(By.XPATH,"/html/body/app-root/main/app-home/div/div[1]/a[1]")
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(1)
+
+    element = driver.find_element(By.XPATH,"/html/body/app-root/main/app-menu/div/div[2]/a")
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(2)
+    
+    email = driver.find_element(By.XPATH,"/html/body/app-root/main/app-login/div/div/form/div[1]/input")
+    email.send_keys("harendraverma21@gmail.com")
+    time.sleep(1)
+
+    password = driver.find_element(By.XPATH,"/html/body/app-root/main/app-login/div/div/form/div[2]/input")
+    password.send_keys("harendra21@HK")
+    time.sleep(1)
+   
+    element = driver.find_element(By.XPATH,"/html/body/app-root/main/app-login/div/div/form/div[4]/button")
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(6)
+
+
+    element = driver.find_element(By.XPATH,"/html/body/app-root/main/app-home/div/div[2]/div[4]/div/a")
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(1)
+
+
+    element = driver.find_element(By.XPATH,"/html/body/app-root/main/app-servers/div/div[4]/mat-tab-group/div/mat-tab-body[1]/div/div/div[1]/app-servers-list/div["+str(random.randint(1, 80))+"]/p/span[1]")
+    driver.execute_script("arguments[0].click();", element)
+    time.sleep(8)
+
+    element = driver.find_element(By.XPATH,"/html/body/app-root/main/app-home/div/div[2]/div[4]/div/a")
+    print("Location - ", element.text)
+    time.sleep(2)
+
 def connectUltrasurf(driver):
     print("Ultrasurf")
     driver.execute_script("var images = document.getElementsByTagName('img');var l = images.length;for (var i = 0; i < l; i++) {images[0].parentNode.removeChild(images[0]);}")
@@ -262,9 +312,11 @@ def connectUltrasurf(driver):
     closeExtraTabs(driver)
 
 socket.setdefaulttimeout(10)
-vpn = random.choice([3,4,5])
+vpn = random.choice([3,4,5,6])
+
+# vpn = 5
 posts = getPosts()
-print(len(posts))
+# print(len(posts))
 agents = getUserAgents()
 
 while True:
@@ -279,14 +331,13 @@ while True:
             options.add_extension('./files/uvpn.crx')
         elif vpn == 2:
             options.add_extension('./files/vpnpro.crx')
-        elif vpn == 3:
+        elif vpn == 3 or vpn == 5:
             options.add_extension('./files/zenmate.crx')
         elif vpn == 4:
             options.add_extension('./files/ultra.crx')
         else:
             options.add_extension('./files/windscribe.crx')
             
-
         options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
         options.add_experimental_option('useAutomationExtension', False)
         options.add_argument("--autoplay-policy=no-user-gesture-required")
@@ -295,8 +346,8 @@ while True:
         options.add_argument("--dns-prefetch-disable")
         options.add_argument("--disable-gpu")
         options.add_argument('--start-maximized')
-        if vpn != 4:
-            options.add_argument('--single-process')
+        # if vpn != 4:
+        #     options.add_argument('--single-process')
 
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-blink-features=AutomationControlled')
@@ -307,7 +358,7 @@ while True:
         # options.add_argument('--proxy-server=%s' % PROXY_STR)
 
         caps = DesiredCapabilities().CHROME
-        caps["pageLoadStrategy"] = "eager"
+        caps["pageLoadStrategy"] = "normal"
         driver = webdriver.Chrome(desired_capabilities=caps, options=options)
         driver.set_page_load_timeout(150)
 
@@ -321,6 +372,8 @@ while True:
             connectZenmate(driver)
         elif vpn == 4:
             connectUltrasurf(driver)
+        elif vpn == 5:
+            connectZenmateWithLogin(driver)
         else:
             time.sleep(5)
             connectWindscribe(driver)

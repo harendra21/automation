@@ -65,7 +65,7 @@ def visit():
         options.add_argument("disable-infobars")
 
         caps = DesiredCapabilities().CHROME
-        caps["pageLoadStrategy"] = "eager"
+        caps["pageLoadStrategy"] = "normal"
         driver = webdriver.Chrome(desired_capabilities=caps, options=options)
         driver.set_page_load_timeout(150)
 
