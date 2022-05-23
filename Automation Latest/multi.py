@@ -65,8 +65,12 @@ def getPosts():
         return posts
 
 def getUserAgents():
-    data = open('./files/userAgents.json')
-    return json.load(data)['agents']
+    with open("./files/userAgents.txt") as file_in:
+        userAgents = []
+        for name in file_in:
+            agent = name.replace('\n','')
+            userAgents.append(agent)
+        return userAgents
 
 def getWorkingProxy(proxies):
     return "151.22.181.213:8080"
