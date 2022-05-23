@@ -18,6 +18,10 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 import socket
 from sentry_sdk import set_tag
 from sys import platform
+import undetected_chromedriver as uc
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+
 
 sentry_sdk.init(
     # "https://d096b23f59334172b63d968435501637@o514513.ingest.sentry.io/5617820",
@@ -131,8 +135,10 @@ while True:
         options.add_argument("disable-infobars")
         
 
-        driver = webdriver.Chrome(options=options)
-        driver.set_page_load_timeout(90)
+        caps = DesiredCapabilities().CHROME
+        caps["pageLoadStrategy"] = "eager"
+        driver = uc.Chrome(desired_capabilities=caps, options=options)
+        driver.set_page_load_timeout(150)
         driver.get('chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/html/foreground.html')
         if random.randint(1,2) == 1:
             driver.set_window_size(random.randint(425, 1366), random.randint(700, 800))

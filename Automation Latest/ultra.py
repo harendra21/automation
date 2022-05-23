@@ -7,6 +7,7 @@ from datetime import datetime
 import json
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from sys import platform
+import undetected_chromedriver as uc
 
 
 # time.sleep(random.randint(4,8))
@@ -61,7 +62,7 @@ def visit():
 
         caps = DesiredCapabilities().CHROME
         caps["pageLoadStrategy"] = "eager"
-        driver = webdriver.Chrome(desired_capabilities=caps, options=options)
+        driver = uc.Chrome(desired_capabilities=caps, options=options)
         driver.set_page_load_timeout(150)
 
         driver.set_window_size(random.randint(300, 1200), random.randint(500, 900))
