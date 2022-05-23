@@ -87,11 +87,10 @@ def visit():
         while height > y:
             y = int(y) + random.randint(160,200)
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
-            clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
             time.sleep(2)
 
         time.sleep(random.randint(5,10))
-        driver.execute_script('window.location.href = "{}";'.format(random.choice(posts)))
+        driver.get(random.choice(posts))
         time.sleep(random.randint(5,10))
         print(driver.title)
 
@@ -100,7 +99,6 @@ def visit():
         while height > y:
             y = int(y) + random.randint(160,200)
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
-            clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
             time.sleep(2)
 
         time.sleep(random.randint(10,25))

@@ -77,14 +77,8 @@ def clickElem(by,selector,driver):
 
 def readStory(story, driver, count):
     start = datetime.now()
-    if count > 1:
-        driver.execute_script("window.open('');")
-        driver.switch_to.window(driver.window_handles[count -1])
-
     driver.get(story)
-    
-    if count == 1:
-        closeExtraTabs(driver)
+    closeExtraTabs(driver)
     print(driver.title)
     time.sleep(random.randint(5,8))
     y = 0
@@ -92,7 +86,6 @@ def readStory(story, driver, count):
     while height > y:
         y = int(y) + random.randint(160,200)
         driver.execute_script("window.scrollTo(0, "+str(y)+")")
-        clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
         time.sleep(2)
 
     time.sleep(random.randint(20,30))

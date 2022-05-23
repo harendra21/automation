@@ -105,7 +105,6 @@ def readStory(story, driver):
     while scheight < 1:
         rand_sec = random.randint(0, 20)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight*%s);" % scheight)
-        clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
         scheight += .002 * rand_sec
         time.sleep(0.2 * rand_sec)
     time.sleep(random.randint(10,15))
