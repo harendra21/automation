@@ -10,12 +10,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import urllib.request , socket
 from sys import platform
 
-socket.setdefaulttimeout(10)
-vpn = random.choice([1,2,3,4,5])
-posts = getPosts()
-print(len(posts))
-agents = getUserAgents()
-
 def is_bad_proxy(pip):    
     try:        
         proxy_handler = urllib.request.ProxyHandler({'http': pip})        
@@ -256,6 +250,12 @@ def connectUltrasurf(driver):
     driver.execute_script("var images = document.getElementsByTagName('img');var l = images.length;for (var i = 0; i < l; i++) {images[0].parentNode.removeChild(images[0]);}")
     time.sleep(6)
     closeExtraTabs(driver)
+
+socket.setdefaulttimeout(10)
+vpn = random.choice([1,2,3,4,5])
+posts = getPosts()
+print(len(posts))
+agents = getUserAgents()
 
 while True:
     try:
