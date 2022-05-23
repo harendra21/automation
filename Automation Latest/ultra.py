@@ -82,6 +82,7 @@ def visit():
         while height > y:
             y = int(y) + random.randint(160,200)
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
+            clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
             time.sleep(2)
 
         time.sleep(random.randint(5,10))
@@ -94,9 +95,11 @@ def visit():
         while height > y:
             y = int(y) + random.randint(160,200)
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
+            clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
             time.sleep(2)
 
         time.sleep(random.randint(10,25))
+        clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
 
         print("Time Taken: "+str(datetime.now() - start))
         print("=========================================")
