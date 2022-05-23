@@ -8,10 +8,14 @@ from selenium.webdriver.common.by import By
 from pyvirtualdisplay import Display
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from proxy_checking import ProxyChecker
-
 import urllib.request , socket
-socket.setdefaulttimeout(10)
+from sys import platform
 
+socket.setdefaulttimeout(10)
+vpn = random.choice([1,2,3,4,5])
+posts = getPosts()
+print(len(posts))
+agents = getUserAgents()
 
 def is_bad_proxy(pip):    
     try:        
@@ -28,15 +32,13 @@ def is_bad_proxy(pip):
         return 1
     return 0
 
-
 def getProxyList():
-    with open("http_proxies.txt") as file_in:
+    with open("./files/http_proxies.txt") as file_in:
         lines = []
         for line in file_in:
             proxy = line.replace('\n','')
             lines.append(proxy)
         return lines
-
 
 def get_free_proxies(driver):
     driver.get('https://sslproxies.org')
@@ -61,15 +63,17 @@ def get_free_proxies(driver):
     
     return proxies
 
-vpn = random.choice([1,2,3,4])
+def getPosts():
+    with open("./files/posts.txt") as file_in:
+        posts = []
+        for url in file_in:
+            post = url.replace('\n','')
+            posts.append(post)
+        return posts
 
-postsData = open('./posts.json')
-posts = json.load(postsData)['posts']
-
-print(len(posts))
-
-data = open('./userAgents.json')
-agents = json.load(data)['agents']
+def getUserAgents():
+    data = open('./files/userAgents.json')
+    return json.load(data)['agents']
 
 def getWorkingProxy(proxies):
     return "151.22.181.213:8080"
@@ -248,23 +252,30 @@ def connectZenmate(driver):
     driver.execute_script("arguments[0].click();", element)
     time.sleep(5)
 
+def connectUltrasurf(driver):
+    print("Ultrasurf")
+    driver.execute_script("var images = document.getElementsByTagName('img');var l = images.length;for (var i = 0; i < l; i++) {images[0].parentNode.removeChild(images[0]);}")
+    time.sleep(6)
+    closeExtraTabs(driver)
 
-try:
-    while True:
+while True:
+    try:
         # display = Display(visible=1, size=(random.randint(320, 1920), random.randint(600, 750)))
         # display.start()
         options = Options()
         ua = random.choice(agents)
         options.add_argument(f'user-agent={ua}')
         
-        # if vpn == 1:
-        #     options.add_extension('./uvpn.crx')
-        # elif vpn == 2:
-        #     options.add_extension('./vpnpro.crx')
-        # elif vpn == 3:
-        #     options.add_extension('./zenmate.crx')
-        # else:
-        #     options.add_extension('./windscribe.crx')
+        if vpn == 1:
+            options.add_extension('./files/uvpn.crx')
+        elif vpn == 2:
+            options.add_extension('./files/vpnpro.crx')
+        elif vpn == 3:
+            options.add_extension('./files/zenmate.crx')
+        elif vpn == 4:
+            options.add_extension('./files/ultra.crx')
+        else:
+            options.add_extension('./files/windscribe.crx')
             
 
         options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
@@ -275,55 +286,50 @@ try:
         options.add_argument("--dns-prefetch-disable")
         options.add_argument("--disable-gpu")
         options.add_argument('--start-maximized')
-        options.add_argument('--single-process')
+        if vpn != 4:
+            options.add_argument('--single-process')
+
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument("disable-infobars")
 
-        
-
         # PROXY_STR = getWorkingProxy(getProxyList())
         # options.add_argument('--proxy-server=%s' % PROXY_STR)
 
-
         caps = DesiredCapabilities().CHROME
         caps["pageLoadStrategy"] = "eager"
-
-
         driver = webdriver.Chrome(desired_capabilities=caps, options=options)
         driver.set_page_load_timeout(150)
 
-
+        driver.execute_script("var images = document.getElementsByTagName('img');var l = images.length;for (var i = 0; i < l; i++) {images[0].parentNode.removeChild(images[0]);}")
         
+        if vpn == 1:
+            connectUVPN(driver)
+        elif vpn == 2:
+            connectVPNPro(driver)
+        elif vpn == 3:
+            connectZenmate(driver)
+        elif vpn == 4:
+            connectUltrasurf(driver)
+        else:
+            time.sleep(5)
+            connectWindscribe(driver)
 
-        try:
-            # if vpn == 1:
-            #     connectUVPN(driver)
-            # elif vpn == 2:
-            #     connectVPNPro(driver)
-            # elif vpn == 3:
-            #     connectZenmate(driver)
-            # else:
-            #     time.sleep(5)
-            #     connectWindscribe(driver)
-
-            # time.sleep(5)
+        time.sleep(5)
+        readStory(random.choice(posts), driver)
+        readStory(random.choice(posts), driver)
+        if random.randint(1,2) == 1:
             readStory(random.choice(posts), driver)
-            readStory(random.choice(posts), driver)
-            if random.randint(1,2) == 1:
-                readStory(random.choice(posts), driver)
-            driver.quit()
-            time.sleep(10)
-        except Exception as e:
-            print("Something went wrong!.  Trying again......")
-            print(str(e))
-            driver.quit()
-            # display.stop()
-            time.sleep(random.randint(4,8))
-            os.system("python3 multi.py")
-except Exception as e:
-    print("Oops!  Something went wrong!.  Trying again.")
-    print(str(e))
-    time.sleep(random.randint(4,8))
-    os.system("python3 multi.py")
+        driver.quit()
+        time.sleep(10)
+    except Exception as e:
+        print("Something went wrong!.  Trying again......")
+        print(str(e))
+        driver.quit()
+        # display.stop()
+        time.sleep(random.randint(4,8))
+        if platform == "linux" or platform == "linux2":
+            os.system('python3 ultra.py')
+        elif platform == "win32":
+            os.system('python ultra.py')

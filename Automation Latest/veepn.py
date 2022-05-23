@@ -17,10 +17,11 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 import socket
 from sentry_sdk import set_tag
+from sys import platform
 
 sentry_sdk.init(
-    "https://d096b23f59334172b63d968435501637@o514513.ingest.sentry.io/5617820",
-    traces_sample_rate=1.0
+    # "https://d096b23f59334172b63d968435501637@o514513.ingest.sentry.io/5617820",
+    # traces_sample_rate=1.0
 )
 
 sys.tracebacklimit=0
@@ -29,10 +30,23 @@ sys.tracebacklimit=0
 vDisplay = False
 vDisplayVisible = False
 
-postsData = open('./posts.json')
-posts = json.load(postsData)['posts']
-data = open('./userAgents.json')
-agents = json.load(data)['agents']
+def getPosts():
+    with open("./files/posts.txt") as file_in:
+        posts = []
+        for url in file_in:
+            post = url.replace('\n','')
+            posts.append(post)
+        return posts
+
+def getUserAgents():
+    data = open('./files/userAgents.json')
+    return json.load(data)['agents']
+
+posts = getPosts()
+
+print(len(posts))
+
+agents = getUserAgents()
 
 def errorLog(err):
     err = err.replace('\n','')
@@ -90,11 +104,14 @@ while True:
     password = today
 
     try:
-        sess = requests.Session()
+        # sess = requests.Session()
         # ua = sess.headers['User-Agent']
         ua = random.choice(agents)
         options = Options()
+
         
+        options.add_extension('./files/veepn.crx')
+        options.add_argument(f'user-agent={ua}')
         options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
         options.add_experimental_option('useAutomationExtension', False)
         options.add_argument("--autoplay-policy=no-user-gesture-required")
@@ -210,4 +227,7 @@ while True:
         if vDisplay:
             display.stop()
         time.sleep(4)
-        os.system("python3 veepn.py")
+        if platform == "linux" or platform == "linux2":
+            os.system('python3 ultra.py')
+        elif platform == "win32":
+            os.system('python ultra.py')
