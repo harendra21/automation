@@ -20,8 +20,6 @@ from sentry_sdk import set_tag
 from sys import platform
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-
-
 sentry_sdk.init(
     # "https://d096b23f59334172b63d968435501637@o514513.ingest.sentry.io/5617820",
     # traces_sample_rate=1.0
@@ -94,9 +92,11 @@ def readStory(story, driver, count):
     while height > y:
         y = int(y) + random.randint(160,200)
         driver.execute_script("window.scrollTo(0, "+str(y)+")")
+        clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
         time.sleep(2)
 
     time.sleep(random.randint(20,30))
+    clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
     print("Time Taken: "+str(datetime.now() - start))
 
 
