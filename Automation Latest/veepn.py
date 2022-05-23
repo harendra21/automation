@@ -18,7 +18,6 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 import socket
 from sentry_sdk import set_tag
 from sys import platform
-import undetected_chromedriver as uc
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
@@ -137,7 +136,7 @@ while True:
 
         caps = DesiredCapabilities().CHROME
         caps["pageLoadStrategy"] = "eager"
-        driver = uc.Chrome(desired_capabilities=caps, options=options)
+        driver = webdriver.Chrome(desired_capabilities=caps, options=options)
         driver.set_page_load_timeout(150)
         driver.get('chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/html/foreground.html')
         if random.randint(1,2) == 1:
