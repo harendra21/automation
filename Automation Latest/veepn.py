@@ -19,6 +19,8 @@ import socket
 from sentry_sdk import set_tag
 from sys import platform
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 sentry_sdk.init(
     # "https://d096b23f59334172b63d968435501637@o514513.ingest.sentry.io/5617820",
@@ -72,7 +74,8 @@ def closeExtraTabs(driver):
             driver.switch_to.window(tab_list[tabs - 1])
 
 def clickElem(by,selector,driver):
-    elem = driver.find_element(by, selector)
+    elem = WebDriverWait(driver, 1).until(EC.presence_of_element_located((by, selector)))
+    # elem = driver.find_element(by, selector)
     driver.execute_script("arguments[0].click();", elem)
 
 def readStory(story, driver, count):
@@ -80,7 +83,7 @@ def readStory(story, driver, count):
     driver.get(story)
     closeExtraTabs(driver)
     print(driver.title)
-    time.sleep(random.randint(5,8))
+    time.sleep(random.randint(20,30))
     y = 0
     height = driver.execute_script("return document.body.scrollHeight")
     while height > y:
@@ -214,7 +217,7 @@ while True:
         location = ele.get_attribute('innerText')
         
         print('Location: ' + location.replace('\n', ' - '))
-        
+        driver.switch_to.default_content()
         readStory(random.choice(posts), driver,1)
         readStory(random.choice(posts), driver,2)
         if random.randint(1,2) == 1:
@@ -230,6 +233,6 @@ while True:
             display.stop()
         time.sleep(4)
         if platform == "linux" or platform == "linux2":
-            os.system('python3 ultra.py')
+            os.system('python3 veepn.py')
         elif platform == "win32":
-            os.system('python ultra.py')
+            os.system('python veepn.py')

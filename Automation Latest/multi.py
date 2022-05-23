@@ -339,6 +339,6 @@ while True:
         # display.stop()
         time.sleep(random.randint(4,8))
         if platform == "linux" or platform == "linux2":
-            os.system('python3 ultra.py')
+            os.system('python3 multi.py')
         elif platform == "win32":
-            os.system('python ultra.py')
+            os.system('python multi.py')
