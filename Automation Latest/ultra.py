@@ -25,10 +25,24 @@ def closeExtraTabs(driver):
 def visit():
     try:
         options = Options()
-        options.add_extension('./ultra.crx')
-        options.add_argument("start-maximized")
+        
+
         options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
         options.add_experimental_option('useAutomationExtension', False)
+        options.add_argument("--autoplay-policy=no-user-gesture-required")
+        options.add_argument("start-maximized")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--dns-prefetch-disable")
+        options.add_argument("--disable-gpu")
+        options.add_argument('--start-maximized')
+        options.add_argument('--single-process')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        options.add_argument("disable-infobars")
+
+
+
         driver = webdriver.Chrome(options=options)
         driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         driver.execute_cdp_cmd('Network.setUserAgentOverride', {"userAgent": random.choice(user_agents)})

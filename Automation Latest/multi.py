@@ -271,17 +271,12 @@ try:
         options.add_experimental_option('useAutomationExtension', False)
         options.add_argument("--autoplay-policy=no-user-gesture-required")
         options.add_argument("start-maximized")
-       
         options.add_argument("--no-sandbox")
         options.add_argument("--dns-prefetch-disable")
         options.add_argument("--disable-gpu")
-
-
         options.add_argument('--start-maximized')
-        # options.add_argument('--start-fullscreen')
         options.add_argument('--single-process')
         options.add_argument('--disable-dev-shm-usage')
-        # options.add_argument("--incognito")
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument('--disable-blink-features=AutomationControlled')
         options.add_argument("disable-infobars")

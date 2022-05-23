@@ -95,12 +95,21 @@ while True:
         ua = random.choice(agents)
         options = Options()
         
-        options.add_argument(f'user-agent={ua}')
-        options.add_extension('./veepn.crx')
         options.add_experimental_option("excludeSwitches", ["enable-automation","enable-logging"])
         options.add_experimental_option('useAutomationExtension', False)
         options.add_argument("--autoplay-policy=no-user-gesture-required")
         options.add_argument("start-maximized")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--dns-prefetch-disable")
+        options.add_argument("--disable-gpu")
+        options.add_argument('--start-maximized')
+        options.add_argument('--single-process')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        options.add_argument("disable-infobars")
+        
+
         driver = webdriver.Chrome(options=options)
         driver.set_page_load_timeout(90)
         driver.get('chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/html/foreground.html')
