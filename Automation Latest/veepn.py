@@ -78,11 +78,24 @@ def clickElem(by,selector,driver):
     # elem = driver.find_element(by, selector)
     driver.execute_script("arguments[0].click();", elem)
 
+def getAllLinks(driver):
+    links = []
+    elems = driver.find_elements(By.XPATH,"//a[@href]")
+    for elem in elems:
+        url = elem.get_attribute("href")
+        host = url.split("//")[-1].split("/")[0].split('?')[0]
+        if host == "hackeradda.com" or host == "codingblog.online":
+            links.append(elem)
+    return links
+
+
 def readStory(story, driver, count):
     start = datetime.now()
     driver.get(story)
     closeExtraTabs(driver)
     print(driver.title)
+    time.sleep(random.randint(5,6))
+    
     time.sleep(random.randint(20,30))
     y = 0
     height = driver.execute_script("return document.body.scrollHeight")
@@ -91,8 +104,11 @@ def readStory(story, driver, count):
         driver.execute_script("window.scrollTo(0, "+str(y)+")")
         time.sleep(2)
 
-    time.sleep(random.randint(20,30))
-    clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
+    time.sleep(random.randint(10,15))
+    links = getAllLinks(driver)
+    link = random.choice(links)
+    driver.execute_script("arguments[0].click();", link)
+    time.sleep(random.randint(10,15))
     print("Time Taken: "+str(datetime.now() - start))
 
 
