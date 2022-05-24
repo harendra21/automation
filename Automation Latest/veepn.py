@@ -88,7 +88,6 @@ def getAllLinks(driver):
             links.append(elem)
     return links
 
-
 def readStory(story, driver, count):
     start = datetime.now()
     driver.get(story)
@@ -119,8 +118,13 @@ while True:
 
     today = datetime.today()
     today = today.strftime("%d%m%Y")
-    email = "harendra"+today+"@gmail.com"
-    password = today
+
+    email_no = random.choice(['',1,2])
+    email = "harendra"+today+str(email_no)+"@gmail.com"
+    if email_no == 1 or email_no == 2:
+        password = "harendra21@HK"
+    else:
+        password = today
 
     try:
         # sess = requests.Session()

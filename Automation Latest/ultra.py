@@ -45,6 +45,17 @@ def closeExtraTabs(driver):
         driver.close()
         driver.switch_to.window(tab_list[0])
 
+def getAllLinks(driver):
+    links = []
+    elems = driver.find_elements(By.XPATH,"//a[@href]")
+    for elem in elems:
+        url = elem.get_attribute("href")
+        host = url.split("//")[-1].split("/")[0].split('?')[0]
+        if host == "hackeradda.com" or host == "codingblog.online":
+            links.append(elem)
+    return links
+
+
 def visit():
     try:
         ua = random.choice(agents)
@@ -100,6 +111,11 @@ def visit():
             y = int(y) + random.randint(160,200)
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
             time.sleep(2)
+        
+        time.sleep(random.randint(10,15))
+        links = getAllLinks(driver)
+        link = random.choice(links)
+        driver.execute_script("arguments[0].click();", link)
 
         time.sleep(random.randint(10,25))
         clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
