@@ -118,7 +118,7 @@ def visit():
         driver.execute_script("arguments[0].click();", link)
 
         time.sleep(random.randint(10,25))
-        clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
+        
 
         print("Time Taken: "+str(datetime.now() - start))
         print("=========================================")
