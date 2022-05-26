@@ -157,7 +157,7 @@ while True:
         # randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
         
         # randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
-        randomRegion = random.choice([2, 35, 53])
+        randomRegion = random.choice([2, 35, 8])
 
         if randomRegion in collapse:
             
