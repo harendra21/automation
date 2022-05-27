@@ -106,7 +106,6 @@ def readStory(story, driver):
         scheight += .002 * rand_sec
         time.sleep(0.2 * rand_sec)
     time.sleep(random.randint(20,30))
-    clickElem(By.XPATH, "/html/body/div/div/div/footer", driver)
 
 def connectUVPN(driver):
     print("Uvpn")

@@ -12,6 +12,14 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import requests
+
+def saveVisit(formdata):
+    url = 'http://129.154.237.40/'
+    website = requests.post(url, data=formdata)
+    output = website.text
+    return output
+
 def getPosts():
     with open("./files/posts.txt") as file_in:
         posts = []
@@ -56,12 +64,12 @@ def getAllLinks(driver):
             links.append(elem)
     return links
 
-def readStory(story, driver):
+def readStory(story, driver, location = ' - '):
     start = datetime.now()
     driver.get(story)
     closeExtraTabs(driver)
-    print(driver.title)
-    
+    title = driver.title
+    print(title)
     time.sleep(random.randint(30,40))
     y = 0
     height = driver.execute_script("return document.body.scrollHeight")
@@ -75,8 +83,21 @@ def readStory(story, driver):
     link = random.choice(links)
     driver.execute_script("arguments[0].click();", link)
     time.sleep(random.randint(20,30))
-    print("Time Taken: "+str(datetime.now() - start))
-
+    time_taken = str(datetime.now() - start)
+    print("Time Taken: "+time_taken)
+    location = location.split(" - ")[1]
+    formdata = {
+        "system_name":'Aepl',
+        "url":story,
+        "title":title,
+        "time": time_taken,
+        "location" : location,
+        "vpn_name" : "Veepn",
+        "meta_data" : ""
+    }
+    print(formdata)
+    saveVisit(formdata)
+    time.sleep(10)
 
 while True:
     today = datetime.today()
@@ -157,7 +178,7 @@ while True:
         # randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
         
         # randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
-        randomRegion = random.choice([2, 35, 8])
+        randomRegion = random.choice([53,35])
 
         if randomRegion in collapse:
             
@@ -199,13 +220,14 @@ while True:
         time.sleep(2)
         ele = driver.find_element(By.XPATH, "/html/body/div/div/div/div[3]/div[3]/div/div[1]/div/div[2]")
         location = ele.get_attribute('innerText')
+        location = location.replace('\n', ' - ')
         
-        print('Location: ' + location.replace('\n', ' - '))
+        print('Location: ' + location)
         
-        readStory(random.choice(posts), driver)
-        readStory(random.choice(posts), driver)
+        readStory(random.choice(posts), driver,location)
+        readStory(random.choice(posts), driver,location)
         if random.randint(1,2) == 1:
-            readStory(random.choice(posts), driver)
+            readStory(random.choice(posts), driver,location)
         print("=======================================")
         driver.quit()
     except Exception as e:

@@ -8,6 +8,13 @@ import json
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from sys import platform
 from selenium.webdriver.common.by import By
+import requests
+
+def saveVisit(formdata):
+    url = 'http://129.154.237.40/'
+    website = requests.post(url, data=formdata)
+    output = website.text
+    return output
 
 
 # time.sleep(random.randint(4,8))
@@ -87,11 +94,10 @@ def visit():
         driver.execute_script("var images = document.getElementsByTagName('img');var l = images.length;for (var i = 0; i < l; i++) {images[0].parentNode.removeChild(images[0]);}")
         
         closeExtraTabs(driver)
-        driver.get(random.choice(posts))
+        story = random.choice(posts)
+        driver.get(story)
         closeExtraTabs(driver)
-        
-        print(driver.title)
-        
+        title = driver.title
         start = datetime.now()
         y = 0
         height = driver.execute_script("return document.body.scrollHeight")
@@ -100,10 +106,29 @@ def visit():
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
             time.sleep(2)
 
+        time.sleep(random.randint(25,40))
+
+        time_taken = str(datetime.now() - start)
+        print("Time Taken: "+time_taken)
+        formdata = {
+            "system_name":'Aepl',
+            "url":story,
+            "title":title,
+            "time": time_taken,
+            "location" : "US",
+            "vpn_name" : "Ultrasurf",
+            "meta_data" : ""
+        }
+        print(formdata)
+        saveVisit(formdata)
+
+        
+        story = random.choice(posts)
+        driver.get(story)
+        start = datetime.now()
         time.sleep(random.randint(5,10))
-        driver.get(random.choice(posts))
-        time.sleep(random.randint(5,10))
-        print(driver.title)
+        title = driver.title
+        
 
         y = 0
         height = driver.execute_script("return document.body.scrollHeight")
@@ -112,15 +137,28 @@ def visit():
             driver.execute_script("window.scrollTo(0, "+str(y)+")")
             time.sleep(2)
         
-        time.sleep(random.randint(10,15))
+        time.sleep(random.randint(25,40))
         links = getAllLinks(driver)
         link = random.choice(links)
         driver.execute_script("arguments[0].click();", link)
 
         time.sleep(random.randint(10,25))
         
+        time_taken = str(datetime.now() - start)
+        print("Time Taken: "+time_taken)
+        formdata = {
+            "system_name":'Aepl',
+            "url":story,
+            "title":title,
+            "time": time_taken,
+            "location" : "US",
+            "vpn_name" : "Ultrasurf",
+            "meta_data" : ""
+        }
+        print(formdata)
+        saveVisit(formdata)
 
-        print("Time Taken: "+str(datetime.now() - start))
+
         print("=========================================")
         driver.quit()
     except Exception as e:
