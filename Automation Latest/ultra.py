@@ -9,6 +9,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from sys import platform
 from selenium.webdriver.common.by import By
 import requests
+import socket
 
 def saveVisit(formdata):
     url = 'http://129.154.237.40/'
@@ -110,8 +111,9 @@ def visit():
 
         time_taken = str(datetime.now() - start)
         print("Time Taken: "+time_taken)
+        system = socket.gethostname()
         formdata = {
-            "system_name":'Aepl',
+            "system_name": system,
             "url":story,
             "title":title,
             "time": time_taken,
@@ -147,7 +149,7 @@ def visit():
         time_taken = str(datetime.now() - start)
         print("Time Taken: "+time_taken)
         formdata = {
-            "system_name":'Aepl',
+            "system_name":system,
             "url":story,
             "title":title,
             "time": time_taken,

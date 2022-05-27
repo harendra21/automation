@@ -11,8 +11,8 @@ from sys import platform
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
 import requests
+import socket
 
 def saveVisit(formdata):
     url = 'http://129.154.237.40/'
@@ -86,8 +86,9 @@ def readStory(story, driver, location = ' - '):
     time_taken = str(datetime.now() - start)
     print("Time Taken: "+time_taken)
     location = location.split(" - ")[1]
+    system = socket.gethostname()
     formdata = {
-        "system_name":'Aepl',
+        "system_name":system,
         "url":story,
         "title":title,
         "time": time_taken,
