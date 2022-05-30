@@ -6,8 +6,6 @@ from selenium.webdriver.common.by import By
 from datetime import datetime
 from pyvirtualdisplay import Display
 import random
-
-
 def createAccount(email,password): 
     options = Options()
     # options.add_argument('--headless')
@@ -30,11 +28,10 @@ def createAccount(email,password):
 with Display(visible=True, size=(1200, 1500)):
 
     today = datetime.today().strftime("%d%m%Y")
-    email = "harendra"+today+"1@gmail.com"
-    
     password = "harendra21@HK"
-    print(email)
-    createAccount(email,password)
-    sleep(5)
-    email = "harendra"+today+"2@gmail.com"
-    createAccount(email,password)
+    email = "harendra"+today+"1@gmail.com"
+
+    for i in range(1,6):
+        email = "harendra"+today+str(i)+"@gmail.com"
+        createAccount(email,password)
+        sleep(5)

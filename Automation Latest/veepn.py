@@ -103,12 +103,9 @@ def readStory(story, driver, location = ' - '):
 while True:
     today = datetime.today()
     today = today.strftime("%d%m%Y")
-    email_no = random.choice(['',1,2])
+    email_no = random.choice([1,2,3,4,5])
     email = "harendra"+today+str(email_no)+"@gmail.com"
-    if email_no == 1 or email_no == 2:
-        password = "harendra21@HK"
-    else:
-        password = today
+    password = "harendra21@HK"
 
 
     try:
@@ -178,8 +175,8 @@ while True:
         # randomRegion = random.randint(1, 56) # for all regions
         # randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
         
-        # randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
-        randomRegion = random.choice([53,35])
+        randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
+        # randomRegion = random.choice([53])
 
         if randomRegion in collapse:
             
