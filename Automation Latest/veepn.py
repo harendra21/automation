@@ -100,14 +100,19 @@ def readStory(story, driver, location = ' - '):
     saveVisit(formdata)
     time.sleep(10)
 
+def restart():
+    if platform == "linux" or platform == "linux2":
+        os.system('python3 veepn.py')
+    else:
+        os.system('python veepn.py')
+
 while True:
     today = datetime.today()
     today = today.strftime("%d%m%Y")
     email_no = random.choice([1,2,3,4,5])
     email = "harendra"+today+str(email_no)+"@gmail.com"
     password = "harendra21@HK"
-
-
+    
     try:
         ua = random.choice(agents)
         options = Options()
@@ -169,14 +174,9 @@ while True:
         # select region
         clickElem(By.XPATH, "/html/body/div/div/div/div[3]/div[3]/div/div[1]",driver)
         time.sleep(2)
-
         collapse = [2, 8, 18, 20, 23, 27, 28, 41, 43, 47, 53, 55, 56]
 
-        # randomRegion = random.randint(1, 56) # for all regions
-        # randomRegion = random.choice([2, 3, 5, 8, 14, 16, 17, 43, 53, 55])
-        
         randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
-        # randomRegion = random.choice([53])
 
         if randomRegion in collapse:
             
@@ -200,7 +200,7 @@ while True:
                 print("VPN is not connecting")
                 driver.quit()
                 time.sleep(4)
-                os.system("python3 veepn.py")
+                restart()
             else:    
                 element = driver.find_element(By.XPATH, "/html/body/div/div/div/div[3]/div[1]/div/div/div")
                 text = element.get_attribute('innerText')
@@ -211,7 +211,7 @@ while True:
                     print("VPN is OFF")
                     driver.quit()
                     time.sleep(4)
-                    os.system("python3 veepn.py")
+                    restart()
                 time.sleep(2)
                 retry = retry + 1
         
@@ -232,7 +232,4 @@ while True:
         print(str(e))
         driver.quit()
         time.sleep(4)
-        if platform == "linux" or platform == "linux2":
-            os.system('python3 veepn.py')
-        else:
-            os.system('python veepn.py')
+        restart()

@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from datetime import datetime
 from pyvirtualdisplay import Display
 import random
-def createAccount(email,password): 
+def createAccount(email,password):
     options = Options()
     # options.add_argument('--headless')
     options.add_argument('--no-sandbox')
