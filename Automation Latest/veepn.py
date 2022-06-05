@@ -11,12 +11,12 @@ from sys import platform
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import requests
 import socket
+import requests
 
 def saveVisit(formdata):
     url = 'http://129.154.237.40/'
-    website = requests.post(url, data=formdata)
+    website = requests.post(url, data=formdata, timeout=1)
     output = website.text
     return output
 
@@ -74,7 +74,7 @@ def readStory(story, driver, location = ' - '):
     y = 0
     height = driver.execute_script("return document.body.scrollHeight")
     while height > y:
-        y = int(y) + random.randint(160,200)
+        y = int(y) + random.randint(200,300)
         driver.execute_script("window.scrollTo(0, "+str(y)+")")
         time.sleep(3)
 
@@ -175,7 +175,6 @@ while True:
         clickElem(By.XPATH, "/html/body/div/div/div/div[3]/div[3]/div/div[1]",driver)
         time.sleep(2)
         collapse = [2, 8, 18, 20, 23, 27, 28, 41, 43, 47, 53, 55, 56]
-
         randomRegion = random.choice([2, 8, 55, 53, 18, 49, 34])
 
         if randomRegion in collapse:
